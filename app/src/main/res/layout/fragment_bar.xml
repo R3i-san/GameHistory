@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@color/green"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!--android:scaleType="centerCrop"-->
+
+                <ImageButton
+                    android:id="@+id/addPartyButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_add_party" />
+
+                <ImageButton
+                    android:id="@+id/addGameButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_add_game" />
+
+                <ImageButton
+                    android:id="@+id/StatsButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity=""
+                    android:src="@drawable/ic_stats" />
+
+        </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

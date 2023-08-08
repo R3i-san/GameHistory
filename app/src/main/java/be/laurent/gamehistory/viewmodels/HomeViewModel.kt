@@ -4,43 +4,66 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.laurent.gamehistory.models.GameModel
 import be.laurent.gamehistory.models.PartyModel
-import be.laurent.gamehistory.repository.RoomDB
+import be.laurent.gamehistory.models.PartyScoresModel
+import be.laurent.gamehistory.repository.Repo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
+
 class HomeViewModel : ViewModel() {
 
-    //private var parties : LiveData<List<GameModel>> = LiveData()
-    //var parties = MutableLiveData<ArrayList<PartyModel>>(ArrayList())
-    private val _parties : MutableStateFlow<List<PartyModel>> = MutableStateFlow(emptyList())
-    val parties : StateFlow<List<PartyModel>>
-        get() = _parties.asStateFlow()
+    private val repo = Repo.get()
+    private val _parties : MutableStateFlow<List<PartyScoresModel>> = MutableStateFlow(emptyList())
+    val parties: StateFlow<List<PartyScoresModel>> = _parties
 
 
-    private val repo = RoomDB
+    fun load(){
+        loadParties()
+    }
 
-    fun retrieveParties(){
-        if(_parties.value.isNotEmpty()) return
+    private fun loadParties() {
+        viewModelScope.launch {
+            repo.getParties().collect {
+                _parties.value = it
+            }
+        }
+    }
+
+    fun filter(game : String, player : String){
 
         viewModelScope.launch {
-            repo.getParties()?.collect{ _parties.value = it }
+            repo.getPartiesBy(game, player).collect {
+                _parties.value = it
+            }
         }
     }
 
 
-    fun getParties() : List<PartyModel> {
-        return parties.value!!
+    fun getParties() : ArrayList<PartyScoresModel> {
+        val alist = ArrayList<PartyScoresModel>()
+        parties.value.forEach { p -> alist.add(p)  }
+        return alist
     }
 
-    /*fun addParty(party : PartyModel){
-        parties.value!!.add(party)
+    fun getPartyAt(index : Int) : PartyScoresModel{
+        return parties.value[index]
+    }
+
+
+    fun getMaxScore(){
+
+    }
+
+    /*fun getPartiesWithScore() : ArrayList<PartyScoreModel> {
+        val alist = ArrayList<PartyScoreModel>()
+        partiesScore.value.forEach { p -> alist.add(p)  }
+        return alist
     }*/
 
-    fun getNbrParties() : Int = parties.value!!.size
+    fun getNbrParties() : Int = _parties.value.size
 
 }

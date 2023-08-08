@@ -17,9 +17,14 @@ import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.room.Room
+import be.laurent.gamehistory.adapter.PartyAdapter
 import be.laurent.gamehistory.databinding.ActivityMainBinding
 import be.laurent.gamehistory.fragments.BarFragment
 import be.laurent.gamehistory.fragments.HomeFragment
@@ -29,69 +34,38 @@ import be.laurent.gamehistory.models.PartyModel
 import be.laurent.gamehistory.repository.RoomDB
 import be.laurent.gamehistory.viewmodels.AddPartyViewModel
 import be.laurent.gamehistory.viewmodels.HomeViewModel
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var fragmentTitle : FrameLayout
-    private lateinit var fragmentHome : FrameLayout
-    private lateinit var fragmentBar : FrameLayout
-
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        homeViewModel.retrieveParties()
 
-        setContentView(R.layout.activity_main)
+        viewModel.load()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        fragmentTitle = binding.containerFragmentTitle
-        fragmentHome = binding.containerFragmentHome
-        fragmentBar = binding.containerFragmentBar
-
-        initFrags()
-
-        tranferParty()
-    }
-
-    override fun onResume() {
-        super.onResume()
+        binding.submitFilter.setOnClickListener {setFilterAction()}
+        displaySearchCount()
 
     }
 
-    private fun initFrags(){
 
-
-
-        val transaction = supportFragmentManager.beginTransaction()
-        //transaction.replace(fragmentTitle.id, tFrag)
-        transaction.replace(fragmentHome.id, HomeFragment())
-        //transaction.replace(fragmentHome.id, HomeFragment(this, homeViewModel))
-        transaction.replace(fragmentBar.id, BarFragment())
-
-        transaction.commit()
+    private fun setFilterAction() {
+        viewModel.filter(
+            binding.gameFilter.text.toString(),
+            binding.playerFilter.text.toString())
+        displaySearchCount()
     }
 
-    private fun tranferParty(){
-
-    /*    val addPartyViewModel = extractParty() ?: return
-
-        homeViewModel.addParty(
-            PartyModel(
-                GameModel(addPartyViewModel.description, 2, "Moving pieces", 30),
-                addPartyViewModel.description,
-                30,
-                "here",
-                "pciture"))*/
-    }
-
-
-    private fun extractParty() : AddPartyViewModel?{
-        return intent.extras?.get("partyViewModel") as AddPartyViewModel?
+    private fun displaySearchCount(){
+        binding.resultCount.text = String.format("%s résulat(s)", viewModel.getNbrParties().toString())
     }
 
 }

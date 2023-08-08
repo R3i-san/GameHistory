@@ -6,6 +6,6 @@ class IntentApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        RoomDB.initialize(this)
+        Repo.initialize(this)
     }
 }

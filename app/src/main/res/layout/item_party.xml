@@ -24,6 +24,7 @@
 
             <!--android:scaleType="centerCrop"-->
             <ImageView
+                android:id="@+id/party_thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_game" />
@@ -58,7 +59,7 @@
          />
 
     <TextView
-        android:id="@+id/party_score"
+        android:id="@+id/partyDescription"
         style="@style/DefaultTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/party_name" />
 
 
-    <androidx.cardview.widget.CardView
+   <!-- <androidx.cardview.widget.CardView
         android:id="@+id/gameDetails"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -82,12 +83,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--android:scaleType="centerCrop"-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_details" />
+    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+    <ImageButton
+        android:id="@+id/gameDetails"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_details"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

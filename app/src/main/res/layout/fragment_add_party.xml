@@ -1,39 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/add_party_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+    <Spinner
+        android:id="@+id/game_select_spinner"
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        android:hint="Nom" />
+
+    <EditText
+        android:id="@+id/party_description"
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/default_margin"
+        android:hint="Description"
+        android:padding="@dimen/default_margin" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scores_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
+    <EditText
+        android:id="@+id/party_timer"
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:hint="Durée (min)"
+        android:padding="@dimen/default_margin" />
 
-    <!--
-            <EditText
-                style="@style/DefaultTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="@dimen/default_margin"
-                android:hint="Joueur 1"
-                android:padding="@dimen/default_margin" />
+    <EditText
+        android:id="@+id/party_location"
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/default_margin"
+        android:hint="Lieu"
+        android:padding="@dimen/default_margin" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/default_margin"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/load_image_button"
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:background="@color/green"
+                android:text="Charger une image"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/selected_image"
+                android:layout_width="158dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_game" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/default_margin"
+        android:background="@color/black"
+        android:text="Confirmer"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/add_party_form"
+        app:layout_constraintBottom_toTopOf="@id/data_integrity_warning"
+        tools:layout_editor_absoluteX="15dp" />
+
+    <TextView
+        android:id="@+id/data_integrity_warning"
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/red"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
-            <EditText
-                style="@style/DefaultTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="@dimen/default_margin"
-                android:hint="Joueur 2"
-                android:padding="@dimen/default_margin" />
-
-            <EditText
-                style="@style/DefaultTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="@dimen/default_margin"
-                android:hint="Durée"
-                android:padding="@dimen/default_margin" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    -->
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

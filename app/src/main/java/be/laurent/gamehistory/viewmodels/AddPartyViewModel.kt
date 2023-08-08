@@ -1,41 +1,44 @@
 package be.laurent.gamehistory.viewmodels
 
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.laurent.gamehistory.daos.GameDao
-import be.laurent.gamehistory.daos.PartyDao
-import be.laurent.gamehistory.interfaces.IRepo
 import be.laurent.gamehistory.models.GameModel
 import be.laurent.gamehistory.models.PartyModel
-import be.laurent.gamehistory.repository.RoomDB
-import com.bumptech.glide.Glide.init
+import be.laurent.gamehistory.models.ScoreModel
+import be.laurent.gamehistory.repository.Repo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-import java.util.UUID
-
-@Parcelize
-class AddPartyViewModel(
-    var description : String = "I won",
-    var players : List<String> = ArrayList<String>(),
-    var score : String = "1-0"
-) : ViewModel(), Parcelable {
-
-    var pid : String = UUID.randomUUID().toString()
-    private val repo = RoomDB
 
 
-  fun createParty(){
+class AddPartyViewModel : ViewModel(){
 
-      viewModelScope.launch {
-          repo.addParty(
-              PartyModel(1,
-                  "test",
-              description,
-              30,
-              "location test",
-              "put a picutre here"))
-          }
-      }
-  }
+    private val repo = Repo.get()
+    private val _games :  MutableStateFlow<List<GameModel>> = MutableStateFlow(emptyList())
+    val games : StateFlow<List<GameModel>> = _games
+    lateinit var selectedGame : GameModel
+    var thumbnail : ByteArray = ByteArray(0)
+
+    fun getNbrScores() = selectedGame.players
+
+    fun loadGames() {
+        viewModelScope.launch {
+            repo.getGames().collect{
+                _games.value = it
+            }
+        }
+
+    }
+
+    fun getGamesNames() : List<String>{
+        val alist = ArrayList<String>()
+        games.value.forEach { g -> alist.add(g.name)  }
+        return alist
+    }
+
+    fun createParty(party: PartyModel, score : List<ScoreModel>){
+        viewModelScope.launch {
+            repo.addParty(party, score)
+        }
+    }
+}

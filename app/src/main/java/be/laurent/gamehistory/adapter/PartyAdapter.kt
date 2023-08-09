@@ -12,10 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import be.laurent.gamehistory.R
+import be.laurent.gamehistory.interfaces.IDisplayDetails
+import be.laurent.gamehistory.models.PartyModel
 import be.laurent.gamehistory.models.PartyScoresModel
 
 class PartyAdapter(
-    private val context: Context,
+    private val detailsDesplayer : IDisplayDetails,
     private val layoutId: Int,
     private val parties: List<PartyScoresModel>
     ) : RecyclerView.Adapter<PartyAdapter.ViewHolder> () {
@@ -37,26 +39,21 @@ class PartyAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentParty = parties[position]
-        holder.partyName.text = currentParty.party.gameID
-        holder.partyDescription.text = currentParty.party.description
-        holder.detailsButton.setOnClickListener{setButtonAction()}
+        val currentParty = parties[position].party
+        holder.partyName.text = currentParty.gameID
+        holder.partyDescription.text = currentParty.description
+        holder.detailsButton.setOnClickListener{detailsDesplayer.displayDetails(position)}
         loadThumbnail(holder, currentParty)
-
     }
 
-    private fun loadThumbnail(holder: ViewHolder, currentParty : PartyScoresModel){
+    private fun loadThumbnail(holder: ViewHolder, currentParty : PartyModel){
 
-        if(currentParty.party.thumbnail.isEmpty()) return
+        if(currentParty.thumbnail.isEmpty()) return
 
         val imageView = holder.partyThumbnail
-        val bytes = currentParty.party.thumbnail
+        val bytes = currentParty.thumbnail
         val bmp : Bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size);
         imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 256, 256, false))
-    }
-
-    private fun setButtonAction()  {
-        Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
     }
 
     override fun getItemCount(): Int = parties.size

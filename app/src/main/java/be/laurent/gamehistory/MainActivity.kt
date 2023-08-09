@@ -49,10 +49,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.load()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        displaySearchCount()
         setContentView(binding.root)
 
         binding.submitFilter.setOnClickListener {setFilterAction()}
-        displaySearchCount()
+
+
 
     }
 

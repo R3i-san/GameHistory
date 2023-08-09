@@ -17,7 +17,7 @@ class AddPartyViewModel : ViewModel(){
     private val _games :  MutableStateFlow<List<GameModel>> = MutableStateFlow(emptyList())
     val games : StateFlow<List<GameModel>> = _games
     lateinit var selectedGame : GameModel
-    var thumbnail : ByteArray = ByteArray(0)
+    var thumbnail : ByteArray? = null
 
     fun getNbrScores() = selectedGame.players
 

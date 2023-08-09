@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import be.laurent.gamehistory.R
 import be.laurent.gamehistory.models.ScoreModel
 
-class ScoreAdapter(
+class ScoreFieldsAdapter(
     private val layoutId: Int,
     private val nbrScores : Int
-) : RecyclerView.Adapter<ScoreAdapter.ViewHolder> () {
+) : RecyclerView.Adapter<ScoreFieldsAdapter.ViewHolder> () {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val scoreName = view.findViewById<TextView>(R.id.scoreName)

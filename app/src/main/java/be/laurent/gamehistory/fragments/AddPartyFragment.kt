@@ -3,6 +3,7 @@ package be.laurent.gamehistory.fragments
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +13,16 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import be.laurent.gamehistory.R
-import be.laurent.gamehistory.adapter.ScoreAdapter
+import be.laurent.gamehistory.adapter.ScoreFieldsAdapter
 import be.laurent.gamehistory.databinding.FragmentAddPartyBinding
 import be.laurent.gamehistory.models.GameModel
 import be.laurent.gamehistory.models.PartyModel
@@ -31,9 +35,9 @@ import java.lang.NumberFormatException
 import kotlin.Exception
 
 //TODO : View stats
+
 //TODO : Add game from addPartyActivity
 //TODO : (Rework style)
-//TODO : Display details
 
 class AddPartyFragment : Fragment(){
 
@@ -53,8 +57,7 @@ class AddPartyFragment : Fragment(){
         binding = FragmentAddPartyBinding.inflate(layoutInflater)
 
         binding.confirmButton.setOnClickListener{addParty()};
-
-        binding.loadImageButton.setOnClickListener{getThumbnail()}
+        binding.loadImageButton.setOnClickListener{chooseThumbnail()}
 
         initSpinnerListener()
 
@@ -98,10 +101,19 @@ class AddPartyFragment : Fragment(){
         }
     }
 
-    private fun setFields(){
+    private fun setFields() {
+        loadThumbnail()
         binding.partyTimer.setText(viewModel.selectedGame.timer.toString())
         binding.partyDescription.setText(viewModel.selectedGame.description)
-        binding.scoresRecyclerView.adapter = ScoreAdapter(R.layout.item_score, viewModel.getNbrScores())
+
+        binding.scoresRecyclerView.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
+
+        binding.scoresRecyclerView.adapter =
+            ScoreFieldsAdapter(R.layout.item_score, viewModel.getNbrScores())
 
     }
 
@@ -117,16 +129,14 @@ class AddPartyFragment : Fragment(){
             activity?.onBackPressed()
 
         } catch (e : Exception){
-            binding.dataIntegrityWarning.visibility = View.GONE
-            binding.dataIntegrityWarning.visibility = View.VISIBLE
+
             when(e){
                 is NullPointerException -> {
-                    binding.dataIntegrityWarning.text = "Veuillez remplir tous les champs"
-
+                    Toast.makeText(context, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
                 }
 
                 is NumberFormatException -> {
-                    binding.dataIntegrityWarning.text = "Les champs de scores doivent être remplis"
+                        Toast.makeText(context, "Veuillez remplir les champs score", Toast.LENGTH_SHORT).show()
                 }
 
                 else -> throw e
@@ -141,33 +151,35 @@ class AddPartyFragment : Fragment(){
             binding.partyDescription.text.toString(),
             binding.partyTimer.text.toString().toInt(),
             binding.partyLocation.text.toString(),
-            viewModel.thumbnail
+            viewModel.thumbnail ?: viewModel.selectedGame.thumbnail
         )
     }
 
     private fun extractScores(pid : String) : List<ScoreModel>{
+
         val scores = ArrayList<ScoreModel>()
-        for(i in 0 until binding.scoresRecyclerView.adapter!!.itemCount){
-            val holder = binding.scoresRecyclerView.findViewHolderForAdapterPosition(i)
-            val name = holder?.itemView?.findViewById<EditText>(R.id.scoreName)!!.text.toString()
-            val value = holder.itemView.findViewById<EditText>(R.id.scoreValue)!!.text.toString().toInt()
-            scores.add(ScoreModel(name, value, pid))
+
+        val recyclerView = binding.scoresRecyclerView
+
+        for(i in 0 until recyclerView.adapter!!.itemCount){
+
+            val holder = recyclerView.findViewHolderForAdapterPosition(i)
+            val item = holder?.itemView
+
+            val name = item?.findViewById<EditText>(R.id.scoreName)
+            val value = item?.findViewById<EditText>(R.id.scoreValue)
+
+            scores.add(ScoreModel(
+                name?.text.toString(),
+                value?.text.toString().toInt(),
+                pid))
         }
         return scores
-    }
-
-    private fun getThumbnail() {
-        val intent = Intent()
-        intent.type = "image/"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Séléctionner une image"), 1)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
-
 
             if((intent == null) || (intent.data == null)) return
 
@@ -175,6 +187,21 @@ class AddPartyFragment : Fragment(){
             imageView.setImageURI(intent.data)
             convertThumbnail(imageView)
         }
+    }
+
+    private fun loadThumbnail(){
+
+        val imageView = binding.selectedImage
+        val bytes = viewModel.thumbnail ?: viewModel.selectedGame.thumbnail
+        val bmp : Bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size);
+        imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 256, 256, false))
+    }
+
+    private fun chooseThumbnail() {
+        val intent = Intent()
+        intent.type = "image/"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Séléctionner une image"), 1)
     }
 
     private fun convertThumbnail(imageView : ImageView){
@@ -185,7 +212,7 @@ class AddPartyFragment : Fragment(){
             viewModel.thumbnail = stream.toByteArray()
             stream.close()
         } catch (e : Exception){
-            binding.dataIntegrityWarning.text = "Une erreur est survenue lors de la récupération de la vignette"
+           Toast.makeText(context, "Une erreur est survenue lors de la récupération de la vignette", Toast.LENGTH_SHORT).show()
         }
     }
 }

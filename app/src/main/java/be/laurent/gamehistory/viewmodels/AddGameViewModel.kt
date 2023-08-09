@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 class AddGameViewModel : ViewModel() {
 
     private val repo = Repo.get()
+    var thumbnail : ByteArray = ByteArray(0)
 
     fun createGame(game: GameModel){
         viewModelScope.launch {

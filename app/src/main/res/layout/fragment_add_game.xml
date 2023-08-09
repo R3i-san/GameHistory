@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_margin="@dimen/default_margin">
+        android:layout_margin="@dimen/default_margin"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/load_image_button"
+            android:id="@+id/take_photo_button"
             android:layout_width="224dp"
             android:layout_height="match_parent"
             android:background="@color/green"
@@ -20,13 +25,14 @@
             android:textColor="@color/white" />
 
         <ImageView
-            android:id="@+id/selected_image"
+            android:id="@+id/photo_took"
             android:layout_width="158dp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_game" />
 
     </LinearLayout>
+
 
     <EditText
         style="@style/DefaultTextStyle"
@@ -53,7 +59,7 @@
         android:layout_height="80dp"
         android:layout_margin="@dimen/default_margin"
         android:inputType="number"
-        android:hint="Nombre de joueurs"
+        android:hint="Nombre de joueurs (8 max.)"
         android:padding="@dimen/default_margin" />
 
 

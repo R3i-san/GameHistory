@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.laurent.gamehistory.models.PartyModel
 import be.laurent.gamehistory.models.PartyScoresModel
+import be.laurent.gamehistory.models.ScoreModel
 import be.laurent.gamehistory.repository.Repo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,6 @@ class HomeViewModel : ViewModel() {
     private val repo = Repo.get()
     private val _parties : MutableStateFlow<List<PartyScoresModel>> = MutableStateFlow(emptyList())
     val parties: StateFlow<List<PartyScoresModel>> = _parties
-
 
     fun load(){
         loadParties()
@@ -42,6 +42,7 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun getScoresOf(index: Int) : List<ScoreModel> = parties.value[index].scores
 
     fun getParties() : ArrayList<PartyScoresModel> {
         val alist = ArrayList<PartyScoresModel>()
@@ -49,8 +50,8 @@ class HomeViewModel : ViewModel() {
         return alist
     }
 
-    fun getPartyAt(index : Int) : PartyScoresModel{
-        return parties.value[index]
+    fun getPartyAt(index : Int) : PartyModel{
+        return parties.value[index].party
     }
 
 
@@ -64,6 +65,6 @@ class HomeViewModel : ViewModel() {
         return alist
     }*/
 
-    fun getNbrParties() : Int = _parties.value.size
+    fun getNbrParties() : Int = parties.value.size
 
 }

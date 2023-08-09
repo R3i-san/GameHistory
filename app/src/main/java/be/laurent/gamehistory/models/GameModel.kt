@@ -10,7 +10,8 @@ class GameModel(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "players") val players : Int,
     @ColumnInfo(name = "description") val description : String,
-    @ColumnInfo(name = "timer") val timer : Int) {
+    @ColumnInfo(name = "timer") val timer : Int,
+    @ColumnInfo(name = "thumbnail") val thumbnail : ByteArray) {
 
     @PrimaryKey(autoGenerate = true) var gid: Int = 0
 

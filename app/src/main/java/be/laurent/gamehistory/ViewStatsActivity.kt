@@ -10,7 +10,7 @@ import be.laurent.gamehistory.fragments.TitleFragment
 
 class ViewStatsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+
     private lateinit var fragmentTitle : FrameLayout
     private lateinit var fragmentBar : FrameLayout
 
@@ -20,7 +20,7 @@ class ViewStatsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
-        fragmentTitle = this.findViewById(R.id.containerFragmentTitle)
+
         fragmentBar = this.findViewById(R.id.containerFragmentBar)
 
         val transaction = supportFragmentManager.beginTransaction()

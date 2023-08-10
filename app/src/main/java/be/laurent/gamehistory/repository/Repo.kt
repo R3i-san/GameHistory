@@ -37,6 +37,8 @@ class Repo private constructor(context: Context) {
     fun getGames(): Flow<List<GameModel>> = gameDao.getAll()
     fun getGamesByName(): Flow<List<String>> = gameDao.getAllByName()
 
+    fun deleteParty(party : PartyModel) = partyDao.delete(party)
+
     suspend fun addParty(party : PartyModel, scores : List<ScoreModel>){
 
             partyDao.insert(party)

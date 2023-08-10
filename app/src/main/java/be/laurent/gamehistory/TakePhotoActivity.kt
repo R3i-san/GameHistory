@@ -117,12 +117,6 @@ class TakePhotoActivity : AppCompatActivity() {
                     setResult(Activity.RESULT_OK, intent)
                     finish()
 
-                    /*val msg = "Capture réussie !: ${output.savedUri}"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)*/
-
-
-
                 }
             }
         )
@@ -175,7 +169,7 @@ class TakePhotoActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "CameraXApp"
+        private const val TAG = "GameHistoryCamera"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 2
         private val REQUIRED_PERMISSIONS =

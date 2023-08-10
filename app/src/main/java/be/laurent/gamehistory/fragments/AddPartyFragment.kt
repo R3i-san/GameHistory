@@ -191,8 +191,12 @@ class AddPartyFragment : Fragment(){
 
     private fun loadThumbnail(){
 
+
+
         val imageView = binding.selectedImage
         val bytes = viewModel.thumbnail ?: viewModel.selectedGame.thumbnail
+        if(bytes.isEmpty()) return
+
         val bmp : Bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size);
         imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 256, 256, false))
     }
